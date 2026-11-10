@@ -1,0 +1,11 @@
+settings.json
+robonix_manifest.local.yaml
+calibration/
+.artifacts/
+rbnx-boot/
+rbnx-build/
+logs/
+Log/
+.venv/
+__pycache__/
+*.mp4

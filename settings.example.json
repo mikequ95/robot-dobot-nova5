@@ -1,0 +1,10 @@
+{
+  "calibration_config": "calibration/config.json",
+  "artifacts_dir": ".artifacts",
+  "arm_provider_id": "nova5_arm",
+  "camera_provider_id": "nova5_wrist_rgb",
+  "object_description": "the small black rectangular Robonix box on the fixed checkerboard",
+  "object_height_mm": 50,
+  "allowed_xy_mm": null,
+  "home_flange_mm_deg": null
+}

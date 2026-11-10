@@ -1,0 +1,50 @@
+# SPDX-License-Identifier: MulanPSL-2.0
+manifestVersion: 1
+name: nova5-rgb-pick-return
+
+catalog:
+  name: robonix.robot.dobot.nova5
+  version: 0.1.0
+  description: Calibrated Nova5 wrist RGB box pickup, replacement and return home.
+  license: MulanPSL-2.0
+  tags: [robot, deploy, dobot, nova5, manipulation, rgb]
+  maintainers:
+    - Rui Ye <yerui@mails.neu.edu.cn>
+
+system:
+  atlas:
+    listen: 127.0.0.1:50051
+  executor:
+    listen: 127.0.0.1:50061
+  soma:
+    robot_yaml: ./soma.yaml
+  pilot:
+    listen: 127.0.0.1:50071
+    vlm:
+      upstream: ${VLM_BASE_URL}
+      api_key: ${VLM_API_KEY}
+      model: gpt-6-astra
+      reasoning_effort: high
+      api_format: openai
+
+primitive:
+  - name: nova5_arm
+    url: https://github.com/mikequ95/primitive-dobot-nova5-arm-rbnx
+    branch: v0.1.0
+    config:
+      calibration_config: ${NOVA5_CALIBRATION_CONFIG}
+      serial_port: ${NOVA5_GRIPPER_PORT}
+      enable_opening: true
+  - name: nova5_wrist_rgb
+    url: https://github.com/mikequ95/primitive-dobot-nova5-camera-rbnx
+    branch: v0.1.0
+    config:
+      calibration_config: ${NOVA5_CALIBRATION_CONFIG}
+      arm_provider_id: nova5_arm
+
+skill:
+  - name: nova5_pick_return
+    url: https://github.com/mikequ95/skill-nova5-pick-return-rbnx
+    branch: v0.1.0
+    config:
+      settings: ${NOVA5_SETTINGS}

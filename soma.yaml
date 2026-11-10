@@ -1,0 +1,82 @@
+# SPDX-License-Identifier: MulanPSL-2.0
+urdf:
+  path: ./model/nova5_base.urdf
+  root_link: base_link
+  model_name: nova5_sdk_controlled
+
+robot:
+  id: nova5_sdk_controlled
+  display_name: Nova5 RGB pick and return
+  family: manipulator
+  root_part: base
+  exports:
+    - provider_id: nova5_pick_return
+      capabilities:
+        - path: robonix/skill/nova5_pick_return/pick
+        - path: robonix/skill/nova5_pick_return/pick/status
+        - path: robonix/skill/nova5_pick_return/pick/cancel
+        - path: robonix/skill/nova5_pick_return/place
+        - path: robonix/skill/nova5_pick_return/place/status
+        - path: robonix/skill/nova5_pick_return/place/cancel
+        - path: robonix/skill/nova5_pick_return/home
+        - path: robonix/skill/nova5_pick_return/home/status
+        - path: robonix/skill/nova5_pick_return/home/cancel
+  components:
+    - id: base
+      display_name: Nova5 base
+      type: base
+      urdf_link: base_link
+      exports: []
+      components:
+        - id: arm
+          display_name: Nova5 arm
+          type: manipulator
+          urdf_link: Link1
+          exports:
+            - provider_id: nova5_arm
+              capabilities:
+                - path: robonix/primitive/arm/pos_command
+                - path: robonix/primitive/arm/end_pose
+                - path: robonix/primitive/arm/joint_states
+          components:
+            - id: flange
+              type: mounting_flange
+              urdf_link: flange
+              exports: []
+              components:
+                - id: white_adapter
+                  type: mounting_plate
+                  urdf_link: white_adapter
+                  exports: []
+                - id: gripper
+                  display_name: PGI gripper (TCP only)
+                  type: parallel_jaw_gripper
+                  urdf_link: tcp
+                  exports:
+                    - provider_id: nova5_arm
+                      capabilities:
+                        - path: robonix/primitive/hand/info
+                        - path: robonix/primitive/hand/move_joint
+                        - path: robonix/primitive/hand/state_joint
+                - id: wrist_camera
+                  display_name: Orbbec wrist RGB camera
+                  type: rgb_camera
+                  urdf_link: nova5_wrist_camera_optical
+                  exports:
+                    - provider_id: nova5_wrist_rgb
+                      capabilities:
+                        - path: robonix/primitive/camera/snapshot
+
+description:
+  summary: Nova5 arm, gripper and wrist RGB with separate pick, place and home capabilities.
+  can_do:
+    - Capture a stationary wrist RGB image.
+    - Grasp and hold the configured box.
+    - Place the held box back at its recorded position.
+    - Return home after successful placement.
+  cannot_do:
+    - Move to arbitrary coordinates through this task skill.
+  notes:
+    - The model includes the Nova5 arm and adapter; the gripper is represented only by a 174 mm TCP, and the camera by an optical frame.
+    - Gripper geometry and finger joints are not included; gripper collision and contact modelling are unsupported.
+    - Arm and gripper capabilities use gRPC; Soma does not aggregate their live joint state through ROS.
