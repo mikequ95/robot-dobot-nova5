@@ -4,7 +4,7 @@ Robonix Pilot observes the configured black box through a wrist RGB camera, sele
 
 ## Install
 
-Development and offline validation were performed on Ubuntu 22.04.5 LTS (x86_64, native Linux). This does not establish hardware acceptance of the split deployment.
+Development and offline validation were performed on Ubuntu 22.04.5 LTS (x86_64, native Linux). The published deployment was validated on Nova5 hardware by completing the pick, place, and home sequence.
 
 Use Linux, Python 3.12 with `venv`, Git, and the [Robonix build dependencies](https://github.com/syswonder/robonix#prerequisites). This deployment uses a contributor integration commit containing optional reasoning-effort forwarding and the Executor lifecycle Driver changes proposed in upstream PRs #321 and #322. It is not an official Robonix release.
 
